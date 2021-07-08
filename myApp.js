@@ -7,8 +7,15 @@ app.get("/", (req,res)=>{
     res.sendFile(absolutePath)
 })
 let respObject = {message: "Hello json"}
+
 app.get("/json", (req,res,next)=>{
-  res.json(respObject)
+    if(process.env.MESSAGE_STYLE=="uppercase"){
+        respObject.message = respObject.message.toUpperCase()
+        return res.json(respObject)
+    }
+    else{
+        return res.json(respObject)
+    }
 })
 app.use("/public",express.static(assetsPath))
 
