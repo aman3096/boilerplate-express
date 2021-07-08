@@ -9,13 +9,19 @@ app.get("/", (req,res)=>{
 let respObject = {message: "Hello json"}
 
 app.get("/json", (req,res,next)=>{
-    if(process.env.MESSAGE_STYLE=="uppercase"){
+    if(process.env.MESSAGE_STYLE==="uppercase"){
         respObject.message = respObject.message.toUpperCase()
-        return res.json(respObject)
+        res.json(respObject)
     }
     else{
-        return res.json(respObject)
+        res.json(respObject)         
     }
+    next();
+})
+
+app.get("/json",(req,res,next)=>{
+    console.log(req.method+" "+ req.path+" - "+req.ip);
+
 })
 app.use("/public",express.static(assetsPath))
 
