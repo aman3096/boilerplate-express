@@ -1,6 +1,9 @@
 var express = require('express');
+var bodyParser = require('body-parser');
 var app = express();
-console.log('Hello world')
+
+app.use(bodyParser.urlencoded({extended: false}))
+
 let absolutePath = __dirname + '/views/index.html'
 let assetsPath = __dirname + '/public'
 app.get("/", (req,res)=>{
@@ -18,9 +21,9 @@ app.get("/json", (req,res,next)=>{
     }
     next();
 })
-
 app.get("/json",(req,res,next)=>{
     console.log(req.method+" "+ req.path+" - "+req.ip);
+    next();
 
 })
 app.get("/now", function (req,res,next){
@@ -36,12 +39,17 @@ app.get('/:word/echo',(req,res,next)=>{
 })
 app.use("/public", express.static(assetsPath))
 
-app.route('/name').get((req, res) => {
-    var first = req.query.first;
-    var last = req.query.last;
-    var jsonObj = {name: first + ' ' + last};
+app.get('/name', function(req, res){
+    let first = req.query.first;
+    let last = req.query.last;
+    let jsonObj = {name: first + " " + last};
     res.send(jsonObj);
-  }).post();
+});
+app.post("/name", function(req, res) {
+    // Handle the data in the request
+    var string = req.body.first + " " + req.body.last;
+    res.json({ name: string });
+});
 app.listen(3000);
 console.log("Server running at 3000");
 
