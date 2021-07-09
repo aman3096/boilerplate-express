@@ -26,12 +26,24 @@ app.get("/json",(req,res,next)=>{
 app.get("/now", function (req,res,next){
     req.time = new Date().toString()
     next()
-},function (req,res){
+},function (req,res,next){
     res.send({time:req.time})
+    next();
 })
-app.use("/public",express.static(assetsPath))
+app.get('/:word/echo',(req,res,next)=>{
+    res.json({echo: req.params.word+req.params.word})
+    next();
+})
+app.use("/public", express.static(assetsPath))
 
-
+app.route('/name').get((req, res) => {
+    var first = req.query.first;
+    var last = req.query.last;
+    var jsonObj = {name: first + ' ' + last};
+    res.send(jsonObj);
+  }).post();
+app.listen(3000);
+console.log("Server running at 3000");
 
 
 
